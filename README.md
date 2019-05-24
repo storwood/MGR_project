@@ -1,6 +1,7 @@
 # MGR_project
 
-"./test.sh <dir> <brightness> <blur> <noise> <resize> <motion_blur> "
+
+./test.sh <dir> <brightness> <blur> <noise> <resize> <motion_blur>
 
 dir    - lokalizacja z plikami video
 brightnes - <+/0/-> Jaśniej, bez zmian, ciemniej 
