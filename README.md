@@ -13,11 +13,11 @@ This script overlay snow.mp4 file into inputed source.
 example: ./test.sh <avi_input_file><<brightness> <blur> <noise> <resize>
 
 
-filename  - input video file
-brightnes - exposure filter. "+" symbol = overexpose, "0" symbol = no effect, "-" symbol = underexpose
-blur      - enter value. 1 = extra sharp, -1 = blury image
-noise     - enter value <0,25,50,75,100>; 0 = no noise, 100 = strong noise on image
-resize    - enter value between <0...1>; 0 = 0px x 0px, 1 = original size, 0.5 = size/2
+- filename - input video file
+- brightnes - exposure filter. "+" symbol = overexpose, "0" symbol = no effect, "-" symbol = underexpose
+- blur - enter value between <0...1> 1 = extra sharp, -1 = blury image
+- noise - enter value <0,25,50,75,100>; 0 = no noise, 100 = strong noise on image
+- resize - enter value between <0...1>; 0 = 0px x 0px, 1 = original size, 0.5 = size/2
 
 
 Action to be done:
