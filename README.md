@@ -1,48 +1,33 @@
 # MGR_project
 
 
-./test.sh <dir> <brightness> <blur> <noise> <resize> <motion_blur>
+Status 31.05.2019:
 
-dir    - lokalizacja z plikami video
-brightnes - <+/0/-> Jaśniej, bez zmian, ciemniej 
-blur   - 
-noise  - <0,25,50,75,100>; 0 brak szumu, 100 bardzo zaszumione video
-resize - <0...1>; 0 to 0px x 0px, 1 to orginalny rozmiar, 0.5 rozdzielczosc/2
-#dodalem codec'a coby lepiej konwertowa
+The are two scripts runnable:
 
-Available values for motion blur are:
+1. snow.sh 
+example: ./snow.sh <avi_input_file>
+This script overlay snow.mp4 file into inputed source. 
 
-‘addition’
-‘grainmerge’
-‘and’
-‘average’
-‘burn’
-‘darken’
-‘difference’
-‘grainextract’
-‘divide’
-‘dodge’
-‘freeze’
-‘exclusion’
-‘extremity’
-‘glow’
-‘hardlight’
-‘hardmix’
-‘heat’
-‘lighten’
-‘linearlight’
-‘multiply’
-‘multiply128’
-‘negation’
-‘normal’
-‘or’
-‘overlay’
-‘phoenix’
-‘pinlight’
-‘reflect’
-‘screen’
-‘softlight’
-‘subtract’
-‘vividlight’
-‘xor’
+2. test.sh
+example: ./test.sh <avi_input_file><<brightness> <blur> <noise> <resize>
 
+
+filename  - input video file
+brightnes - exposure filter. "+" symbol = overexpose, "0" symbol = no effect, "-" symbol = underexpose
+blur      - enter value. 1 = extra sharp, -1 = blury image
+noise     - enter value <0,25,50,75,100>; 0 = no noise, 100 = strong noise on image
+resize    - enter value between <0...1>; 0 = 0px x 0px, 1 = original size, 0.5 = size/2
+
+
+Action to be done:
+1. Add motion blur (it is easy to do it by using ffmpeg filter before spliting video into frames)
+2. Add rain on lens (prototype almost ready locally, still need to be improved to be presented)
+3. Merge snow, motion blur, rain on lens into one script.
+
+Used ffmpeg filters:
+
+- eq = brightness -> https://ffmpeg.org/ffmpeg-filters.html#toc-eq
+- unsharp -> https://ffmpeg.org/ffmpeg-filters.html#toc-unsharp-1
+- noise=alls -> https://ffmpeg.org/ffmpeg-filters.html#toc-noise
+- scale=iw -> https://ffmpeg.org/ffmpeg-filters.html#toc-scale-1
