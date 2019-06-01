@@ -10,7 +10,7 @@ example: ./snow.sh <avi_input_file>
 This script overlay snow.mp4 file into inputed source. 
 
 2. test.sh
-example: ./test.sh <avi_input_file><<brightness> <blur> <noise> <resize>
+example: ./test.sh <avi_input_file><<brightness> <blur> <noise> <resize><snow><rain_drops>
 
 
 - filename - input video file
@@ -18,12 +18,12 @@ example: ./test.sh <avi_input_file><<brightness> <blur> <noise> <resize>
 - blur - enter value between <0...1> 1 = extra sharp, -1 = blury image
 - noise - enter value <0,25,50,75,100>; 0 = no noise, 100 = strong noise on image
 - resize - enter value between <0...1>; 0 = 0px x 0px, 1 = original size, 0.5 = size/2
+- snow - enter 1 to enable snow overlap, 0 = no effect
+- rain_drops - 1 to enable rain drops on lens, 0 = no effect
 
 
 Action to be done:
 1. Add motion blur (it is easy to do it by using ffmpeg filter before spliting video into frames)
-2. Add rain on lens (prototype almost ready locally, still need to be improved to be presented)
-3. Merge snow, motion blur, rain on lens into one script.
 
 Used ffmpeg filters:
 
