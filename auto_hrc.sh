@@ -7,16 +7,29 @@ noise=$4
 resize=$5
 snow=$6
 rain_drops=$7
+motion_blur=$8
+motion_blur_mode=$9
 
 mkdir out
 mkdir frames
 
 
 
-if [ $snow == 1 ]; then
+if [ $snow == 1 ] && [ $motion_blur == 1 ]; then
+ffmpeg -i "$filename" -i snow.mp4 -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay[out]" -map "[out]" -c:a copy -c:v libx264 output_snow.mp4
+ffmpeg -i output_snow.mp4 -vf tblend=all_mode=$motion_blur_mode output_motion_blur.mp4
+ffmpeg -i output_motion_blur.mp4 frames/agh_frames%04d.jpg
+rm -rf output_snow.mp4
+rm -rf output_motion_blur.mp4
+elif [ $snow == 1 ] && [ $motion_blur == 0 ]; then
 ffmpeg -i "$filename" -i snow.mp4 -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay[out]" -map "[out]" -c:a copy -c:v libx264 output_snow.mp4
 ffmpeg -i output_snow.mp4 frames/agh_frames%04d.jpg
-else
+rm -rf output_snow.mp4
+elif [ $snow == 0 ] && [ $motion_blur == 1 ]; then
+ffmpeg -i "$filename" -vf tblend=all_mode=$motion_blur_mode output_motion_blur.mp4
+ffmpeg -i output_motion_blur.mp4 frames/agh_frames%04d.jpg
+rm -rf output_motion_blur.mp4
+else 
 ffmpeg -i "$filename" frames/agh_frames%04d.jpg
 fi
 
@@ -32,13 +45,13 @@ for filename in frames/*.jpg; do
 						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".bmp
 		elif [ $exposure == '-' ]
 		then
-			ffmpeg -i "$filename" -vf "eq=brightness=-0.5,
+			ffmpeg -i "$filename" -vf "eq=brightness=-0.3,
 						  unsharp=lx=3:ly=3:la=$blur,
 						   noise=alls=$noise:allf=t,
 						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".bmp
 		elif [ $exposure == '+' ]
 		then
-			ffmpeg -i "$filename" -vf "eq=brightness=0.5,
+			ffmpeg -i "$filename" -vf "eq=brightness=0.3,
 						  unsharp=lx=3:ly=3:la=$blur,
 						   noise=alls=$noise:allf=t,
 						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".bmp
@@ -55,7 +68,7 @@ if [ $rain_drops == 1 ]; then
 		        [1:v]setpts=PTS-STARTPTS, scale=1280x720, \
 		             format=yuva420p,colorchannelmixer=aa=0.5[bottom]; \
 		        [top][bottom]overlay=shortest=1" \
-		out_with_rain/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".bmp
+		out_with_rain/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".png
 	done
 rm -rf out
 else
