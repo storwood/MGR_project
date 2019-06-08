@@ -42,19 +42,19 @@ for filename in frames/*.jpg; do
 			ffmpeg -i "$filename" -vf "eq=brightness=0,
 						  unsharp=lx=3:ly=3:la=$blur,
 						   noise=alls=$noise:allf=t,
-						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".bmp
+						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops"_"$motion_blur".bmp
 		elif [ $exposure == '-' ]
 		then
 			ffmpeg -i "$filename" -vf "eq=brightness=-0.3,
 						  unsharp=lx=3:ly=3:la=$blur,
 						   noise=alls=$noise:allf=t,
-						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".bmp
+						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops"_"$motion_blur".bmp
 		elif [ $exposure == '+' ]
 		then
 			ffmpeg -i "$filename" -vf "eq=brightness=0.3,
 						  unsharp=lx=3:ly=3:la=$blur,
 						   noise=alls=$noise:allf=t,
-						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".bmp
+						   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops"_"$motion_blur".bmp
 		fi	
 done
 
@@ -68,9 +68,8 @@ if [ $rain_drops == 1 ]; then
 		        [1:v]setpts=PTS-STARTPTS, scale=1280x720, \
 		             format=yuva420p,colorchannelmixer=aa=0.5[bottom]; \
 		        [top][bottom]overlay=shortest=1" \
-		out_with_rain/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops".png
+		out_with_rain/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops"_"$motion_blur".bmp
 	done
-rm -rf out
 else
 echo "No rain drops filter"
 fi

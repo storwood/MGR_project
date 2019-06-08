@@ -7,7 +7,7 @@ Practical part done
 Next steps: Schedule demo, fixes after demo and review.
 
 test.sh
-example: ./test.sh <avi_input_file><<brightness> <blur> <noise> <resize><snow><rain_drops><motion_blur_flag><motion_blur_mode>
+example: ./test.sh <avi_input_file> <brightness> <blur> <noise> <resize> <snow> <rain_drops> <motion_blur_flag> <motion_blur_mode>
 
 
 - filename - input video file
