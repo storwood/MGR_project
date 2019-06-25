@@ -14,21 +14,20 @@ mkdir out
 mkdir frames
 
 
-
 if [ $snow == 1 ] && [ $motion_blur_flag == 1 ]; then
-	ffmpeg -i snow.mp4 -vf scale=1600x900 resized_snow.mp4
-	ffmpeg -i "$filename" -i resized_snow.mp4 -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay	[out]" -map "[out]" -c:a copy -c:v libx264 output_snow.mp4
-	ffmpeg -i output_snow.mp4 -vf tmix=frames=$motion_blur output_motion_blur.mp4
+	ffmpeg -i snow_frame.jpg -vf scale=1600x900 resized_snow_frame.jpg
+	ffmpeg -i "$filename" -i resized_snow_frame.jpg -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay	[out]" -map "[out]" -c:a copy -c:v libx264 output_snow.jpg
+	ffmpeg -i output_snow.jpg -vf tmix=frames=$motion_blur output_motion_blur.mp4
 	ffmpeg -i output_motion_blur.mp4 frames/agh_frames%04d.jpg
-	rm -rf resized_snow.mp4
-	rm -rf output_snow.mp4
+	rm -rf resized_snow_frame.jpg
+	rm -rf output_snow.jpg
 	rm -rf output_motion_blur.mp4
 elif [ $snow == 1 ] && [ $motion_blur == 0 ]; then
-	ffmpeg -i snow.mp4 -vf scale=1600x900 resized_snow.mp4
-	ffmpeg -i "$filename" -i resized_snow.mp4 -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay[out]" -map "[out]" -c:a copy -c:v libx264 output_snow.mp4
-	ffmpeg -i output_snow.mp4 frames/agh_frames%04d.jpg
-	rm -rf output_snow.mp4
-	rm -rf resized_snow.mp4
+	ffmpeg -i snow_frame.jpg -vf scale=1600x900 resized_snow_frame.jpg
+	ffmpeg -i "$filename" -i resized_snow_frame.jpg -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay[out]" -map "[out]" -c:a copy -c:v libx264 output_snow.jpg
+	ffmpeg -i output_snow.jpg frames/agh_frames%04d.jpg
+	rm -rf output_snow.jpg
+	rm -rf resized_snow_frame.jpg
 elif [ $snow == 0 ] && [ $motion_blur_flag == 1 ]; then
 	ffmpeg -i "$filename" -vf tmix=frames=$motion_blur output_motion_blur.mp4
 	ffmpeg -i output_motion_blur.mp4 frames/agh_frames%04d.jpg
@@ -43,12 +42,12 @@ for filename in frames/*.jpg; do
 		ffmpeg -i "$filename" -vf "eq=brightness=$exposure,
 					   avgblur=$blur,
 					   noise=alls=$noise:allf=t,
-					   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops"_"$motion_blur_flag"_"$motion_blur".bmp
+					   scale=iw*$resize:ih*$resize" out/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops"_"$motion_blur_flag"_"$motion_blur".jpg
 done
 
 if [ $rain_drops == 1 ]; then
 	mkdir out_with_rain
-	for filename in out/*.bmp; do
+	for filename in out/*.jpg; do
 		basePath=${filename%.*}
 		baseName=${basePath##*/}
 		ffmpeg -i $filename -i rain.png -filter_complex "
@@ -56,7 +55,7 @@ if [ $rain_drops == 1 ]; then
 		        [1:v]setpts=PTS-STARTPTS, scale=1280x720, \
 		             format=yuva420p,colorchannelmixer=aa=0.5[bottom]; \
 		        [top][bottom]overlay=shortest=1" \
-		out_with_rain/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops"_"$motion_blur_flag"_"$motion_blur".bmp
+		out_with_rain/out_"$baseName"_"$exposure"_"$blur"_"$noise"_"$resize"_"$snow"_"$rain_drops"_"$motion_blur_flag"_"$motion_blur".jpg
 	done
 else
 echo "No rain drops filter"
