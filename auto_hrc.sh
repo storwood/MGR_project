@@ -14,7 +14,6 @@ mkdir out
 mkdir frames
 
 
-
 if [ $snow == 1 ] && [ $motion_blur_flag == 1 ]; then
 	ffmpeg -i snow.mp4 -vf scale=1600x900 resized_snow.mp4
 	ffmpeg -i "$filename" -i resized_snow.mp4 -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay	[out]" -map "[out]" -c:a copy -c:v libx264 output_snow.mp4
@@ -24,11 +23,11 @@ if [ $snow == 1 ] && [ $motion_blur_flag == 1 ]; then
 	rm -rf output_snow.mp4
 	rm -rf output_motion_blur.mp4
 elif [ $snow == 1 ] && [ $motion_blur == 0 ]; then
-	ffmpeg -i snow.mp4 -vf scale=1600x900 resized_snow.mp4
-	ffmpeg -i "$filename" -i resized_snow.mp4 -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay[out]" -map "[out]" -c:a copy -c:v libx264 output_snow.mp4
+	ffmpeg -i snow_frame.jpg -vf scale=1600x900 resized_snow_frame.jpg
+	ffmpeg -i "$filename" -i resized_snow_frame.jpg -filter_complex "[1:v]colorkey=0x000000:0.5:0.5[ckout];[0:v][ckout]overlay[out]" -map "[out]" -c:a copy output_snow.mp4
 	ffmpeg -i output_snow.mp4 frames/agh_frames%04d.jpg
 	rm -rf output_snow.mp4
-	rm -rf resized_snow.mp4
+	rm -rf resized_snow_frame.jpg
 elif [ $snow == 0 ] && [ $motion_blur_flag == 1 ]; then
 	ffmpeg -i "$filename" -vf tmix=frames=$motion_blur output_motion_blur.mp4
 	ffmpeg -i output_motion_blur.mp4 frames/agh_frames%04d.jpg
